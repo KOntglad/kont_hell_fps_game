@@ -34,12 +34,12 @@ public class gun_template : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
 
-            //Hedef hedef = hit.transform.TryGetComponent<Hedef>();
+            hit.transform.TryGetComponent<health>(out health obj_health);
 
-            //if (hedef != null)
-            //{
-            //    hedef.hasarAl(damage);
-            //}
+            if (obj_health != null)
+            {
+                obj_health.takeDamage(1);
+            }
 
             //if (hit.rigidbody != null)
             //{
