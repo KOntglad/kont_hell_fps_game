@@ -15,12 +15,12 @@ public class gun_template : MonoBehaviour
     //public GameObject vurusEfekti;
 
 
-    private float siradakiAtes = 0f;
+    private float nextFire = 0f;
     void Update()
     {
-        if (Input.GetMouseButton(0) && Time.time >= siradakiAtes)
+        if (Input.GetMouseButton(0) && Time.time >= nextFire)
         {
-            siradakiAtes = Time.time + 1f / fireSpeed;
+            nextFire = Time.time + 1f / fireSpeed;
             Shoot();
         }
     }

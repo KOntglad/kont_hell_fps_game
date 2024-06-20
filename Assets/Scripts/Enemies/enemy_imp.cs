@@ -32,7 +32,7 @@ public class enemy_imp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        changeDirection();
+        game_imp_states = imp_states.run;
     }
 
     // Update is called once per frame
@@ -42,18 +42,27 @@ public class enemy_imp : MonoBehaviour
         {
             case imp_states.run:
                 follow();
-                prepare_time_now += Time.deltaTime;
-                if(prepare_time_now > prepare_time_max) 
-                {
-                    prepare_time_now = 0;
-                    changeDirection();
-                    game_imp_states = imp_states.strife;
-                }
                 break;
             case imp_states.prepare:
+                if (prepare_time_now <= 0)
+                {
+                    transform.LookAt(player_transform);
+                    enemy_rb.constraints = RigidbodyConstraints.FreezePositionX;
+                    enemy_rb.constraints = RigidbodyConstraints.FreezePositionZ;
+                    enemy_rb.velocity = Vector3.zero;
+                }
+               
                 prepare_time_now += Time.deltaTime;
+                
                 if(prepare_time_now > prepare_time_max) 
                 {
+                    enemy_rb.constraints = RigidbodyConstraints.None;
+                    transform.LookAt(player_transform);
+                    enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
+                    enemy_rb.constraints = RigidbodyConstraints.FreezeRotationX;
+                    enemy_rb.constraints = RigidbodyConstraints.FreezeRotationZ;
+                    prepare_time_now = 0f;
+                    changeDirection();
                     game_imp_states = imp_states.strife;
                 }
                 break;
