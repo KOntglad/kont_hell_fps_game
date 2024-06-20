@@ -7,7 +7,27 @@ public class enemy_imp : MonoBehaviour
     public Rigidbody enemy_rb;
     public float speed;
     public Transform player_transform;
+    public Transform strife_left;
+    public Transform strife_right;
+    public Vector3 direction_transform;
 
+    public float prepare_time_now;
+    public float prepare_time_max;
+    public float strife_state_exit_distance;
+    
+    public enum imp_states 
+    { 
+        idle,
+        run,
+        attack_forward,
+        prepare,
+        strife,
+        death
+
+    };
+
+
+    public imp_states game_imp_states;
 
     // Start is called before the first frame update
     void Start()
@@ -18,7 +38,38 @@ public class enemy_imp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        follow();
+        switch (game_imp_states)
+        {
+            case imp_states.run:
+                follow();
+                prepare_time_now += Time.deltaTime;
+                if(prepare_time_now > prepare_time_max) 
+                {
+                    prepare_time_now = 0;
+                    changeDirection();
+                    game_imp_states = imp_states.strife;
+                }
+                break;
+            case imp_states.prepare:
+                prepare_time_now += Time.deltaTime;
+                if(prepare_time_now > prepare_time_max) 
+                {
+                    game_imp_states = imp_states.strife;
+                }
+                break;
+            case imp_states.strife:
+                moveDirection();
+                if (Vector3.Distance(transform.position, direction_transform) < strife_state_exit_distance)
+                    game_imp_states = imp_states.run;
+                 break;
+            case imp_states.death:
+                die();
+                break;
+        
+        }
+        
+    
+    
     }
 
     void follow() 
@@ -33,17 +84,36 @@ public class enemy_imp : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public void moveDirection()
+    {
+        transform.LookAt(new Vector3(direction_transform.x,transform.position.y,direction_transform.z));
+        enemy_rb.velocity = transform.forward * speed * Time.deltaTime;
+    }
+
     public void changeDirection() 
     {
+
+        Vector3 raycastRight = strife_right.position - transform.position;//https://discussions.unity.com/t/how-to-raycast-always-in-direction-of-a-object/129884
+        Vector3 raycastLeft = strife_left.position - transform.position;
         RaycastHit left;
         RaycastHit right;
-        Physics.Raycast(transform.position, transform.right + (-transform.up / 2), out right,5f);
-        Physics.Raycast(transform.position, -transform.right + (-transform.up / 2), out left,5f);
+        Physics.Raycast(transform.position,raycastRight, out right,5f);
+        Physics.Raycast(transform.position,raycastLeft, out left,5f);
         if(left.collider != null)
         Debug.Log("left: " + left.collider.name);
         if(right.collider != null)
         Debug.Log("right: "+ right.collider.name);
     
+        if(left.collider != null || right.collider != null) 
+        {
+            direction_transform = right.point;
+            game_imp_states = imp_states.strife;
+        }
+        else
+        {
+            Debug.Log("dir fail");
+            return;
+        }
     }
 
 }
