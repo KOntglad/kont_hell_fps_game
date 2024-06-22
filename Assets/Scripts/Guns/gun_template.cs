@@ -34,9 +34,7 @@ public class gun_template : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
 
-            hit.transform.TryGetComponent<health>(out health obj_health);
-
-            if (obj_health != null)
+            if (hit.transform.TryGetComponent<health>(out health obj_health))
             {
                 obj_health.takeDamage(1);
             }
