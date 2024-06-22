@@ -52,6 +52,18 @@ public class imp_slot_manager : MonoBehaviour
 
         max_distance_the_player = 60f; 
     }
+    void decideDash() 
+    {
+        foreach (GameObject imp in imps)
+        {
 
+            if(imp.TryGetComponent<enemy_imp>(out enemy_imp imp_entity))
+            {
+                imp_entity.direction_transform = player.transform.position;
+                imp_entity.game_imp_states = enemy_imp.imp_states.prepare;
+            }
+        }
+
+    }
 
 }

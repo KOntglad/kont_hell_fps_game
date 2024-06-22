@@ -19,6 +19,7 @@ public class enemy_imp : MonoBehaviour
     { 
         idle,
         run,
+        dash,
         attack_forward,
         prepare,
         strife,
@@ -58,23 +59,33 @@ public class enemy_imp : MonoBehaviour
                 {
                     enemy_rb.constraints = RigidbodyConstraints.None;
                     transform.LookAt(player_transform);
+                    //transform.LookAt(direction_transform);
                     enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationX;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationZ;
                     prepare_time_now = 0f;
                     changeDirection();
                     game_imp_states = imp_states.strife;
+                    //game_imp_states = imp_states.dash;
                 }
                 break;
             case imp_states.strife:
-                moveDirection();
+                moveDirection(1);
                 if (Vector3.Distance(transform.position, direction_transform) < strife_state_exit_distance)
                     game_imp_states = imp_states.run;
                  break;
+            
             case imp_states.death:
                 die();
                 break;
-        
+            
+            case imp_states.dash:
+                moveDirection(3);
+                if (Vector3.Distance(transform.position, direction_transform) < strife_state_exit_distance)
+                    game_imp_states = imp_states.run;
+                break;
+            default:
+                break;
         }
         
     
@@ -93,10 +104,10 @@ public class enemy_imp : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void moveDirection()
+    public void moveDirection(float mul)
     {
         transform.LookAt(new Vector3(direction_transform.x,transform.position.y,direction_transform.z));
-        enemy_rb.velocity = transform.forward * speed * Time.deltaTime;
+        enemy_rb.velocity = transform.forward * mul *speed * Time.deltaTime;
     }
 
     public void changeDirection() 

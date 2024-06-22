@@ -13,6 +13,9 @@ public class player_key_move : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundLayer;
 
+
+    public health player_health;
+
     public float height = 4f;
 
     Vector3 yAxisSpeed;
@@ -47,5 +50,14 @@ public class player_key_move : MonoBehaviour
 
 
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.layer == 7) 
+        {
+            player_health.takeDamage(1);
+        }
+    }
+
 }
 
