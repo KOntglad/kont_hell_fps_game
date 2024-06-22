@@ -13,14 +13,31 @@ public class player_key_move : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundLayer;
 
-
+    /// health
     public health player_health;
+    public interface_manager player_ui;
+
+    public float damage_sec_now;
+    public float damage_sec_add;
+    
+    /// 
 
     public float height = 4f;
+
+
+
+
+
 
     Vector3 yAxisSpeed;
     bool isGrounded;
 
+
+
+    void Start()
+    {
+        player_ui.UI_texts[0].text = player_health.now_health.ToString("0");
+    }
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundControl.position, groundDistance, groundLayer);
@@ -53,10 +70,19 @@ public class player_key_move : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.layer == 7) 
+        if(collision.gameObject.layer == 7 && Time.time > damage_sec_now) 
         {
             player_health.takeDamage(1);
+            player_ui.UI_texts[0].text = player_health.now_health.ToString("0");
+            damage_sec_now = Time.time + damage_sec_add;
         }
+    }
+
+    public void game_over() 
+    {
+        player_ui.UI_texts[0].text = "GAME OVER!";
+        Time.timeScale = 0f;
+    
     }
 
 }
