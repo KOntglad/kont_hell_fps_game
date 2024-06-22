@@ -48,9 +48,8 @@ public class enemy_imp : MonoBehaviour
                 if (prepare_time_now <= 0)
                 {
                     transform.LookAt(player_transform);
-                    enemy_rb.constraints = RigidbodyConstraints.FreezePositionX;
-                    enemy_rb.constraints = RigidbodyConstraints.FreezePositionZ;
                     enemy_rb.velocity = Vector3.zero;
+                    enemy_rb.constraints = RigidbodyConstraints.FreezeAll;
                 }
                
                 prepare_time_now += Time.deltaTime;
@@ -58,7 +57,7 @@ public class enemy_imp : MonoBehaviour
                 if(prepare_time_now > prepare_time_max) 
                 {
                     enemy_rb.constraints = RigidbodyConstraints.None;
-                    transform.LookAt(player_transform);
+                    transform.LookAt(new Vector3(direction_transform.x,transform.position.y,direction_transform.z));
                     //transform.LookAt(direction_transform);
                     enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationX;
@@ -96,7 +95,6 @@ public class enemy_imp : MonoBehaviour
     {
         transform.LookAt(player_transform);
         enemy_rb.velocity = transform.forward * speed * Time.deltaTime;
-    
     }
     
     public void die() 
@@ -108,6 +106,7 @@ public class enemy_imp : MonoBehaviour
     {
         transform.LookAt(new Vector3(direction_transform.x,transform.position.y,direction_transform.z));
         enemy_rb.velocity = transform.forward * mul *speed * Time.deltaTime;
+
     }
 
     public void changeDirection() 
