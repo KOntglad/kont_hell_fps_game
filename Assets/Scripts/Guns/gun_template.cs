@@ -10,6 +10,7 @@ public class gun_template : MonoBehaviour
     public float bulletForce = 30f;
 
     public Camera fpsCam;
+    public Animator gun_animation;
 
     //public ParticleSystem ates;
     //public GameObject vurusEfekti;
@@ -28,7 +29,8 @@ public class gun_template : MonoBehaviour
     void Shoot()
     {
         //ates.Play();
-
+        gun_animation.SetTrigger("shoot");
+        
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, distance))
         {
