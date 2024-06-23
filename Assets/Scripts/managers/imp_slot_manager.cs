@@ -27,7 +27,13 @@ public class imp_slot_manager : MonoBehaviour
         if(decide_time_now > decide_time_max) 
         {
             decide_time_now = 0f;
-            decideTripleEvade();
+
+            //int random = (int)Random.Range(0, 1.1f);
+            int random = 1;
+            if(random == 0)
+                decideTripleEvade();
+            if (random == 1)
+                decideDash();
         }
     }
 
@@ -87,7 +93,6 @@ public class imp_slot_manager : MonoBehaviour
             {
                 if (imp.TryGetComponent<enemy_imp>(out enemy_imp imp_entity))
                 {
-                    imp_entity.direction_transform = player.transform.position;
                     imp_entity.speed_mul = 3f;
                     imp_entity.game_imp_states = enemy_imp.imp_states.prepare;
                     i++;

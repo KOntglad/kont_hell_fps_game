@@ -72,6 +72,7 @@ public class enemy_imp : MonoBehaviour
                     }
                     else
                     {
+                        direction_transform = player_transform.position;
                         game_imp_states = imp_states.dash;
                     }
                 }
@@ -89,8 +90,11 @@ public class enemy_imp : MonoBehaviour
             case imp_states.dash:
                 moveDirection(speed_mul);
                 if (Vector3.Distance(transform.position, direction_transform) < strife_state_exit_distance)
+                {
+                    speed_mul = 1f;
                     game_imp_states = imp_states.run;
-                break;
+                }
+                    break;
             default:
                 break;
         }
