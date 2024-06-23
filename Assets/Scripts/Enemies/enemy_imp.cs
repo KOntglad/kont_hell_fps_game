@@ -14,6 +14,7 @@ public class enemy_imp : MonoBehaviour
     public float prepare_time_now;
     public float prepare_time_max;
     public float strife_state_exit_distance;
+    public float speed_mul = 1f;
     
     public enum imp_states 
     { 
@@ -53,23 +54,30 @@ public class enemy_imp : MonoBehaviour
                 }
                
                 prepare_time_now += Time.deltaTime;
-                
-                if(prepare_time_now > prepare_time_max) 
+
+                if (prepare_time_now > prepare_time_max)
                 {
                     enemy_rb.constraints = RigidbodyConstraints.None;
-                    transform.LookAt(new Vector3(direction_transform.x,transform.position.y,direction_transform.z));
-                    //transform.LookAt(direction_transform);
+                    transform.LookAt(new Vector3(direction_transform.x, transform.position.y, direction_transform.z));
                     enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationX;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationZ;
                     prepare_time_now = 0f;
-                    changeDirection();
-                    game_imp_states = imp_states.strife;
-                    //game_imp_states = imp_states.dash;
+
+                    if (speed_mul == 1)
+                    {
+                        changeDirection();
+                        game_imp_states = imp_states.strife;
+
+                    }
+                    else
+                    {
+                        game_imp_states = imp_states.dash;
+                    }
                 }
                 break;
             case imp_states.strife:
-                moveDirection(1);
+                moveDirection(speed_mul);
                 if (Vector3.Distance(transform.position, direction_transform) < strife_state_exit_distance)
                     game_imp_states = imp_states.run;
                  break;
@@ -79,7 +87,7 @@ public class enemy_imp : MonoBehaviour
                 break;
             
             case imp_states.dash:
-                moveDirection(3);
+                moveDirection(speed_mul);
                 if (Vector3.Distance(transform.position, direction_transform) < strife_state_exit_distance)
                     game_imp_states = imp_states.run;
                 break;

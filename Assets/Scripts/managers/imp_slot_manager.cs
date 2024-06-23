@@ -27,9 +27,35 @@ public class imp_slot_manager : MonoBehaviour
         if(decide_time_now > decide_time_max) 
         {
             decide_time_now = 0f;
-            decideEvade();
+            decideTripleEvade();
         }
     }
+
+
+    void decideTripleEvade()
+    {
+        int i = 0;
+        foreach (GameObject imp in imps)
+        {
+            if (i < 2)
+            {
+                if (imp.TryGetComponent<enemy_imp>(out enemy_imp imp_entity))
+                {
+                    imp_entity.direction_transform = player.transform.position;
+                    imp_entity.speed_mul = 1f;
+                    imp_entity.game_imp_states = enemy_imp.imp_states.prepare;
+                }
+                i++;
+            }
+            else 
+            {
+                break;
+            }
+        }
+
+       
+    }
+
 
     void decideEvade() 
     {
@@ -54,13 +80,22 @@ public class imp_slot_manager : MonoBehaviour
     }
     void decideDash() 
     {
+        int i = 0;
         foreach (GameObject imp in imps)
         {
-
-            if(imp.TryGetComponent<enemy_imp>(out enemy_imp imp_entity))
+            if (i < 2)
             {
-                imp_entity.direction_transform = player.transform.position;
-                imp_entity.game_imp_states = enemy_imp.imp_states.prepare;
+                if (imp.TryGetComponent<enemy_imp>(out enemy_imp imp_entity))
+                {
+                    imp_entity.direction_transform = player.transform.position;
+                    imp_entity.speed_mul = 3f;
+                    imp_entity.game_imp_states = enemy_imp.imp_states.prepare;
+                    i++;
+                }
+            }
+            else
+            {
+                break;
             }
         }
 

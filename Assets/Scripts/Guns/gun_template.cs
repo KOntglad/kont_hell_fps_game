@@ -9,6 +9,8 @@ public class gun_template : MonoBehaviour
     public float fireSpeed = 1f;
     public float bulletForce = 30f;
 
+    public int bullet_now, bullet_max;
+
     public Camera fpsCam;
     public Animator gun_animation;
 
@@ -19,11 +21,26 @@ public class gun_template : MonoBehaviour
     private float nextFire = 0f;
     void Update()
     {
-        if (Input.GetMouseButton(0) && Time.time >= nextFire)
+        if (Input.GetMouseButton(0) && Time.time >= nextFire && bullet_now > 0)
         {
             nextFire = Time.time + 1f / fireSpeed;
+            --bullet_now;
+
             Shoot();
         }
+        if(bullet_now <= 0) 
+        {
+            gun_animation.ResetTrigger("shoot");
+            gun_animation.SetBool("isEmpty", true);
+            nextFire = Time.time + 1f / 3 * fireSpeed;
+            bullet_now = bullet_max;
+        }
+        if(bullet_now == bullet_max && Time.time >= nextFire) 
+        {
+            gun_animation.SetBool("isEmpty", false);
+            --bullet_now;
+        }
+    
     }
 
     void Shoot()
