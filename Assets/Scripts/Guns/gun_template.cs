@@ -14,17 +14,25 @@ public class gun_template : MonoBehaviour
     public Camera fpsCam;
     public Animator gun_animation;
 
+    public interface_manager gun_ui;
+
     //public ParticleSystem ates;
     //public GameObject vurusEfekti;
 
+
+    private void Start()
+    {
+        gun_ui.UI_texts[1].text = bullet_now.ToString("0");
+        gun_ui.UI_texts[2].text = bullet_max.ToString("0");
+    }
 
     private float nextFire = 0f;
     void Update()
     {
         if (Input.GetMouseButton(0) && Time.time >= nextFire && bullet_now > 0)
         {
+            gun_ui.UI_texts[1].text = bullet_now.ToString("0");
             nextFire = Time.time + 1f / fireSpeed;
-            --bullet_now;
 
             Shoot();
         }
@@ -38,6 +46,7 @@ public class gun_template : MonoBehaviour
         if(bullet_now == bullet_max && Time.time >= nextFire) 
         {
             gun_animation.SetBool("isEmpty", false);
+            gun_ui.UI_texts[1].text = bullet_now.ToString("0");
             --bullet_now;
         }
     
@@ -46,8 +55,10 @@ public class gun_template : MonoBehaviour
     void Shoot()
     {
         //ates.Play();
-        gun_animation.SetTrigger("shoot");
         
+        gun_animation.SetTrigger("shoot");
+        --bullet_now;
+
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, distance))
         {

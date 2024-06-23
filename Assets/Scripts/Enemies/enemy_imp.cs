@@ -59,7 +59,7 @@ public class enemy_imp : MonoBehaviour
                 {
                     enemy_rb.constraints = RigidbodyConstraints.None;
                     transform.LookAt(new Vector3(direction_transform.x, transform.position.y, direction_transform.z));
-                    enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
+                    //enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationX;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeRotationZ;
                     prepare_time_now = 0f;
@@ -101,7 +101,7 @@ public class enemy_imp : MonoBehaviour
 
     void follow() 
     {
-        transform.LookAt(player_transform);
+        transform.LookAt(new Vector3(player_transform.position.x, transform.position.y,player_transform.position.z));
         enemy_rb.velocity = transform.forward * speed * Time.deltaTime;
     }
     
