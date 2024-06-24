@@ -76,6 +76,7 @@ public class player_key_move : MonoBehaviour
             player_ui.UI_texts[0].text = player_health.now_health.ToString("0");
             damage_sec_now = Time.time + damage_sec_add;
         }
+      
     }
 
     public void game_over() 

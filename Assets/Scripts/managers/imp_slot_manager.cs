@@ -13,6 +13,8 @@ public class imp_slot_manager : MonoBehaviour
     public float decide_time_now;
     public float decide_time_max;
 
+    public float distance_dash, distance_evade;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,12 +30,17 @@ public class imp_slot_manager : MonoBehaviour
         {
             decide_time_now = 0f;
 
-            //int random = (int)Random.Range(0, 1.1f);
-            int random = 1;
-            if(random == 0)
+            float random = Random.Range(0f, 1.1f);
+            if (random <= 0.5)
+            {
                 decideTripleEvade();
-            if (random == 1)
+                Debug.Log("evade " + random);
+            }
+            else
+            {
                 decideDash();
+                Debug.Log("dash " + random);
+            }
         }
     }
 
