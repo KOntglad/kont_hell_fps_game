@@ -11,11 +11,16 @@ public class enemy_imp : MonoBehaviour
     public Transform strife_right;
     public Vector3 direction_transform;
 
+    public float gravity;
+
     public float prepare_time_now;
     public float prepare_time_max;
     public float strife_state_exit_distance;
     public float speed_mul = 1f;
-    
+
+
+    public Animator imp_animator;
+
     public enum imp_states 
     { 
         idle,
@@ -35,11 +40,13 @@ public class enemy_imp : MonoBehaviour
     void Start()
     {
         game_imp_states = imp_states.run;
+        imp_animator.SetBool("prepare", false);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         switch (game_imp_states)
         {
             case imp_states.run:
@@ -51,12 +58,15 @@ public class enemy_imp : MonoBehaviour
                     transform.LookAt(player_transform);
                     enemy_rb.velocity = Vector3.zero;
                     enemy_rb.constraints = RigidbodyConstraints.FreezeAll;
+                    imp_animator.SetBool("prepare", true);
+
                 }
-               
+
                 prepare_time_now += Time.deltaTime;
 
                 if (prepare_time_now > prepare_time_max)
                 {
+                    imp_animator.SetBool("prepare", false);
                     enemy_rb.constraints = RigidbodyConstraints.None;
                     transform.LookAt(new Vector3(direction_transform.x, transform.position.y, direction_transform.z));
                     //enemy_rb.constraints = RigidbodyConstraints.FreezePositionY;
@@ -106,9 +116,10 @@ public class enemy_imp : MonoBehaviour
     void follow() 
     {
         transform.LookAt(new Vector3(player_transform.position.x, transform.position.y,player_transform.position.z));
-        enemy_rb.velocity = transform.forward * speed * Time.deltaTime;
+        enemy_rb.velocity = (transform.forward * speed * Time.deltaTime) - (transform.up * gravity *Time.deltaTime);
+      
     }
-    
+
     public void die() 
     {
         Destroy(gameObject);
@@ -117,7 +128,8 @@ public class enemy_imp : MonoBehaviour
     public void moveDirection(float mul)
     {
         transform.LookAt(new Vector3(direction_transform.x,transform.position.y,direction_transform.z));
-        enemy_rb.velocity = transform.forward * mul *speed * Time.deltaTime;
+        enemy_rb.velocity = (transform.forward * mul *speed * Time.deltaTime) - (transform.up * gravity * Time.deltaTime);
+        
 
     }
 

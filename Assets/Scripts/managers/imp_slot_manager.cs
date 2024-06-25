@@ -24,24 +24,36 @@ public class imp_slot_manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        decide_time_now += Time.deltaTime;
-        
-        if(decide_time_now > decide_time_max) 
+        if (imps.Length > 1)
         {
-            decide_time_now = 0f;
+            decide_time_now += Time.deltaTime;
 
-            float random = Random.Range(0f, 1.1f);
-            if (random <= 0.5)
+            if (decide_time_now > decide_time_max)
             {
-                decideTripleEvade();
-                Debug.Log("evade " + random);
-            }
-            else
-            {
-                decideDash();
-                Debug.Log("dash " + random);
+                decide_time_now = 0f;
+
+                float random = Random.Range(0f, 1.1f);
+                if (random <= 0.5)
+                {
+                    decideTripleEvade();
+                    Debug.Log("evade " + random);
+                }
+                else
+                {
+                    decideDash();
+                    Debug.Log("dash " + random);
+                }
             }
         }
+        else 
+        {
+            if (imps[0].TryGetComponent<enemy_imp>(out enemy_imp imp_entity))
+            {
+                imp_entity.game_imp_states = enemy_imp.imp_states.prepare;
+            }
+
+        }
+    
     }
 
 

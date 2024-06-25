@@ -14,8 +14,8 @@ TagManager:
   - ground
   - Enemy
   - Player
-  - 
-  - 
+  - lava
+  - enemy_ball
   - 
   - 
   - 

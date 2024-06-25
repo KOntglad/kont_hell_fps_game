@@ -5,6 +5,8 @@ using UnityEngine;
 public class player_key_move : MonoBehaviour
 {
     public CharacterController player_char_controller;
+    public Animator player_damage_animator;
+    
 
     public float speed = 10f;
     public float gravity = -9.81f;
@@ -23,6 +25,7 @@ public class player_key_move : MonoBehaviour
     /// 
 
     public float height = 4f;
+
 
 
 
@@ -72,11 +75,21 @@ public class player_key_move : MonoBehaviour
     {
         if(collision.gameObject.layer == 7 && Time.time > damage_sec_now) 
         {
+            hit();
             player_health.takeDamage(1);
             player_ui.UI_texts[0].text = player_health.now_health.ToString("0");
             damage_sec_now = Time.time + damage_sec_add;
         }
-      
+            else if (collision.gameObject.layer == 10 && Time.time > damage_sec_now)
+            {
+
+                hit();
+                player_health.takeDamage(1);
+                player_ui.UI_texts[0].text = player_health.now_health.ToString("0");
+                damage_sec_now = Time.time + damage_sec_add;
+                
+            }
+
     }
 
     public void game_over() 
@@ -84,6 +97,11 @@ public class player_key_move : MonoBehaviour
         player_ui.UI_texts[0].text = "GAME OVER!";
         Time.timeScale = 0f;
     
+    }
+
+    public void hit() 
+    {
+        player_damage_animator.SetTrigger("hit");
     }
 
 }
